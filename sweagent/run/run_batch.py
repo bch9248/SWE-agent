@@ -19,6 +19,16 @@ sweagent run-batch \\
     --config config/default.yaml \\
     --agent.model.name gpt-4o  # configure model
 [/green]
+How to run SR:
+sweagent run-batch \
+--config config/swe_prompt.yaml \
+--num_workers 5 \
+--instances.type swe_bench \
+--instances.subset lite \
+--instances.split dev \
+--instances.evaluate True \
+--instances.slice :3 \
+--instances.shuffle True
 
 [cyan][bold]=== LOADING INSTANCES ===[/bold][/cyan]
 
