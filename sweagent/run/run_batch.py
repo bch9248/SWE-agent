@@ -24,11 +24,34 @@ sweagent run-batch \
 --config config/swe_prompt.yaml \
 --num_workers 5 \
 --instances.type swe_bench \
+--instances.subset full \
+--instances.split dev \
+--instances.evaluate True \
+--instances.slice :99 \
+--instances.shuffle True
+
+sweagent run-batch \
+--config config/swe_prompt.yaml \
+--num_workers 5 \
+--instances.type swe_bench \
 --instances.subset lite \
 --instances.split dev \
 --instances.evaluate True \
---instances.slice :3 \
+--instances.slice :30 \
 --instances.shuffle True
+
+# Run only unresolved instances
+FILTER=$(python3 /tmp/filter_unresolved.py trajectories/azureuser/sr__azure--gpt-4.1-mini__t-0.00__p-1.00__c-3.00___swe_bench_lite_dev/results.json | tail -1)
+
+sweagent run-batch \
+  --config config/sr.yaml \
+  --instances.type swe_bench \
+  --instances.subset lite \
+  --instances.split dev \
+  --instances.shuffle True \
+  --instances.filter="$FILTER" \
+  --redo_existing=True \
+  --num_workers 5
 
 [cyan][bold]=== LOADING INSTANCES ===[/bold][/cyan]
 
